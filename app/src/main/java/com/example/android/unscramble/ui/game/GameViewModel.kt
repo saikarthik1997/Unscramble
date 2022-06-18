@@ -9,6 +9,8 @@ class GameViewModel: ViewModel() {
 
     private var _score = 0
     private var _currentWordCount = 0
+    val currentWordCount: Int
+        get() = _currentWordCount
     private lateinit var _currentScrambledWord: String
     val currentScrambledWord: String
         get() = _currentScrambledWord
@@ -41,6 +43,16 @@ class GameViewModel: ViewModel() {
             true
         } else false
     }
+    private fun increaseScore() {
+        _score += SCORE_INCREASE
+    }
+    fun isUserWordCorrect(playerWord: String): Boolean {
+        if (playerWord.equals(currentWord, true)) {
+            increaseScore()
+            return true
+        }
+        return false
+    }
 
     val score: Int
         get() = _score
@@ -52,6 +64,15 @@ class GameViewModel: ViewModel() {
     override fun onCleared() {
         super.onCleared()
         Log.d("GameFragment", "GameViewModel destroyed!")
+    }
+    /*
+* Re-initializes the game data to restart the game.
+*/
+    fun reinitializeData() {
+        _score = 0
+        _currentWordCount = 0
+        wordsList.clear()
+        getNextWord()
     }
 
 }
